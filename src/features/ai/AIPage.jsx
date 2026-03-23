@@ -11,7 +11,10 @@ const callClaude = async (messages, system) => {
     body: JSON.stringify({ messages, system })
   })
   const d = await r.json()
-  if (!r.ok) throw new Error(d.error || 'API error')
+  if (!r.ok) {
+    console.error('API error:', d)
+    throw new Error(d.error || `HTTP ${r.status}`)
+  }
   return d.content?.find(b => b.type === 'text')?.text || ''
 }
 
@@ -36,8 +39,8 @@ export default function AIPage() {
       setAiRes({mode, data:JSON.parse(raw.replace(/```json|```/g,'').trim())})
       setXp(x=>x+5)
       addHlog(`AI: ${query.slice(0,30)}`, '+5 XP')
-    } catch {
-      setAiRes({mode:'explain',data:{title:'Error',explanation:'Try again.',example:'',practice:null}})
+    } catch(e) {
+      setAiRes({mode:'explain',data:{title:'Error',explanation:e.message||'API call failed. Check console.',example:'',practice:null}})
     }
     setAiLoad(false)
   }
