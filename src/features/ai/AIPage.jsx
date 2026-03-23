@@ -30,10 +30,10 @@ export default function AIPage() {
   const ask = async (q, mode='explain') => {
     const query=(q||aiQ).trim(); if(!query)return
     setAiQ(query); setAiLoad(true); setAiRes(null)
-    const sys = 'You are an SAT tutor. Respond ONLY valid JSON (no markdown).'
+    const sys = 'You are SatPilot SAT tutor. Respond ONLY valid JSON (no markdown, no backticks). Only discuss SAT topics.'
     const prompt = mode==='minitest'
-      ? `4 SAT questions on:"${query}". JSON:{"title":"str","questions":[{"q":"str","opts":["A","B","C","D"],"correct":0,"exp":"str"}]}`
-      : `Explain SAT:"${query}". JSON:{"title":"str","explanation":"2-3 sentences","example":"concrete example","practice":{"q":"str","opts":["A","B","C","D"],"correct":0,"exp":"str"}}`
+      ? `Create 4 SAT practice questions about:"${query}". JSON only: {"title":"str","questions":[{"q":"str","opts":["A","B","C","D"],"correct":0,"exp":"str"}]}`
+      : `Explain this SAT concept:"${query}". JSON only: {"title":"str","explanation":"2-3 sentences about SAT","example":"concrete SAT example","practice":{"q":"SAT practice question","opts":["A","B","C","D"],"correct":0,"exp":"str"}}`
     try {
       const raw = await callClaude([{role:'user',content:prompt}], sys)
       setAiRes({mode, data:JSON.parse(raw.replace(/```json|```/g,'').trim())})
@@ -50,7 +50,7 @@ export default function AIPage() {
     setAiWeakLoad(true); setAiWeak(null)
     const wk = weak.map(([k,v])=>`${SUBJ[k]?.label}:${v}%`).join(', ')
     try {
-      const raw = await callClaude([{role:'user',content:`Weak SAT skills: ${wk}. JSON:{"analysis":"3-4 sentences","tips":[{"subject":"str","tip":"str","priority":1}],"studyOrder":["s1"]}`}], 'SAT coach. ONLY JSON.')
+      const raw = await callClaude([{role:'user',content:`Student weak SAT skills: ${wk}. Analyze and give SAT study tips. JSON only: {"analysis":"3-4 sentences","tips":[{"subject":"str","tip":"str","priority":1}],"studyOrder":["s1"]}`}], 'You are SatPilot SAT tutor. ONLY JSON, no markdown.')
       setAiWeak(JSON.parse(raw.replace(/```json|```/g,'').trim()))
     } catch { setAiWeak({analysis:'Unable to load.',tips:[],studyOrder:[]}) }
     setAiWeakLoad(false)

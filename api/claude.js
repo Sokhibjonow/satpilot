@@ -1,5 +1,16 @@
 export const config = { runtime: 'edge' }
 
+const SAT_SYSTEM = `You are SatPilot — a strict SAT exam preparation tutor built by Cubick.
+
+CRITICAL RULES:
+- You ONLY discuss SAT-related topics: Math, Reading, Writing, Grammar, Vocabulary, test strategies, score improvement
+- If user writes ANYTHING unrelated to SAT — redirect them back to SAT prep
+- If user says "hello", "hi", "привет", "салам" or any greeting — respond with a short SAT tip or ask what SAT topic they need help with
+- Never answer questions about other exams, life advice, coding, politics, weather, etc.
+- Always respond in the same language the user writes in (English or Russian or Uzbek)
+- Keep responses focused, educational, and SAT-specific
+- You must ALWAYS respond in valid JSON format as instructed in the user message`
+
 export default async function handler(req) {
   const cors = {
     'Access-Control-Allow-Origin': '*',
@@ -13,47 +24,55 @@ export default async function handler(req) {
   }
 
   try {
-    const body = await req.json()
-    const { messages, system } = body
+    const { messages, system } = await req.json()
+    const apiKey = process.env.GEMINI_API_KEY
 
-    const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'No API key' }), { status: 500, headers: cors })
+      return new Response(JSON.stringify({ error: 'GEMINI_API_KEY not set' }), { status: 500, headers: cors })
     }
 
-    const payload = {
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 1024,
-      messages: messages || [{ role: 'user', content: 'Hello' }],
-    }
-    if (system) payload.system = system
+    // Build full system instruction
+    const fullSystem = SAT_SYSTEM + '\n\n' + (system || '')
 
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify(payload),
-    })
+    // Convert messages to Gemini format
+    const geminiMessages = messages.map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }))
+
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: fullSystem }]
+          },
+          contents: geminiMessages,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+          }
+        }),
+      }
+    )
 
     const data = await resp.json()
 
-    // Log error details in response for debugging
     if (!resp.ok) {
-      console.error('Anthropic error:', JSON.stringify(data))
-      return new Response(JSON.stringify({ 
-        error: data.error?.message || 'Unknown error',
-        type: data.error?.type,
-        raw: data 
-      }), { status: resp.status, headers: cors })
+      return new Response(JSON.stringify({ error: data.error?.message || 'Gemini error' }), { status: resp.status, headers: cors })
     }
 
-    return new Response(JSON.stringify(data), { status: 200, headers: cors })
+    // Extract text from Gemini response
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
+
+    // Return in Anthropic format so frontend stays the same
+    return new Response(JSON.stringify({
+      content: [{ type: 'text', text }]
+    }), { status: 200, headers: cors })
 
   } catch (err) {
-    console.error('Handler error:', err.message)
-    return new Response(JSON.stringify({ error: err.message, stack: err.stack }), { status: 500, headers: cors })
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: cors })
   }
 }
