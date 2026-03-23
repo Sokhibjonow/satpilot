@@ -3,7 +3,7 @@ import { SUBJ, RANKS, ACHVS } from '../../data/constants.js'
 import { calcGoal, s2score, getWeak, rankScore, getRank, xpLvl, xpIn } from '../../hooks/useProgress.js'
 
 function Chart({data}){
-  const W=380,H=130,pad=18,max=Math.max(...data,10)
+  const W=600,H=130,pad=18,max=Math.max(...data,10)
   const pts=data.map((v,i)=>[pad+(i/(data.length-1))*(W-2*pad),H-pad-(v/max)*(H-2*pad)])
   const pl=pts.map(p=>p.join(',')).join(' ')
   const area=[`${pts[0][0]},${H-pad}`,...pts.map(p=>p.join(',')),...[`${pts[pts.length-1][0]},${H-pad}`]].join(' ')
