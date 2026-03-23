@@ -13,7 +13,7 @@ export default function Sidebar({ open, onClose }) {
     <>
       <div className={`sb-ov${open?' open':''}`} onClick={onClose}/>
       <nav className={`sidebar${open?' open':''}`}>
-        <div className="sb-logo">⬡ <span>StudyCoach</span></div>
+        <div className="sb-logo">🛩 <span>SatPilot</span></div>
 
         {NAV.map(n => (
           <button key={n.id} className={`sb-item${page===n.id?' active':''}`} onClick={()=>navigate(n.id)}>

@@ -86,6 +86,30 @@ export default function ProfilePage() {
           <button className="btn btn-sm" style={{background:'var(--r)',color:'white'}} onClick={resetAll}>Reset</button>
         </div>
       </div>
+
+      {/* Contact / About */}
+      <div className="card" style={{maxWidth:480,marginTop:14,background:'var(--ink)',border:'none'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:14}}>
+          <div style={{width:36,height:36,borderRadius:9,background:'linear-gradient(135deg,var(--g),var(--g2))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>🛩</div>
+          <div>
+            <div style={{fontFamily:'var(--sf)',fontSize:16,color:'white'}}>SatPilot</div>
+            <div style={{fontSize:11,color:'rgba(255,255,255,.4)',fontFamily:'var(--sm)'}}>AI-powered SAT Coach</div>
+          </div>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:8}}>
+          <a href="mailto:ozodbeksoxibjonov@gmail.com" style={{display:'flex',alignItems:'center',gap:10,padding:'9px 12px',background:'rgba(255,255,255,.06)',borderRadius:9,textDecoration:'none',color:'rgba(255,255,255,.8)',fontSize:13,transition:'background .18s'}}>
+            <span style={{fontSize:16}}>✉️</span>
+            <span style={{fontFamily:'var(--sm)',fontSize:12}}>ozodbeksoxibjonov@gmail.com</span>
+          </a>
+          <a href="tel:+998902546690" style={{display:'flex',alignItems:'center',gap:10,padding:'9px 12px',background:'rgba(255,255,255,.06)',borderRadius:9,textDecoration:'none',color:'rgba(255,255,255,.8)',fontSize:13,transition:'background .18s'}}>
+            <span style={{fontSize:16}}>📞</span>
+            <span style={{fontFamily:'var(--sm)',fontSize:12}}>+998 90 254 66 90</span>
+          </a>
+        </div>
+        <div style={{marginTop:12,fontSize:10,color:'rgba(255,255,255,.2)',fontFamily:'var(--sm)',textAlign:'center'}}>
+          Built with ♥ · Powered by Cubick
+        </div>
+      </div>
     </div>
   )
 }

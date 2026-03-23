@@ -64,7 +64,7 @@ export default function TestPage() {
     <div className="test-wrap">
       <div className="test-inner">
         <div className="t-hdr">
-          <div className="t-logo">⬡ StudyCoach</div>
+          <div className="t-logo">🛩 SatPilot</div>
           <div style={{fontSize:11,fontFamily:'var(--sm)',color:'var(--mt)'}}>
             {curMod.sec} · {curMod.mod} · {qIdx+1}/5
           </div>

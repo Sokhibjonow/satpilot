@@ -43,7 +43,7 @@ function ModIntro() {
   return (
     <div className="ob-wrap">
       <div className="ob-card" style={{textAlign:'center'}}>
-        <div className="ob-logo" style={{justifyContent:'center'}}>⬡ StudyCoach</div>
+        <div className="ob-logo" style={{justifyContent:'center'}}>🛩 SatPilot</div>
         <div style={{display:'flex',gap:5,marginBottom:22}}>
           {DIAG_MODULES.map((m,i) => (
             <div key={m.id} style={{flex:1,height:4,borderRadius:99,
@@ -99,7 +99,7 @@ function Results() {
   return (
     <div className="res-wrap">
       <div className="res-card">
-        <div className="ob-logo">⬡ StudyCoach</div>
+        <div className="ob-logo">🛩 SatPilot</div>
         <div style={{textAlign:'center',marginBottom:16}}>
           <div style={{fontSize:12,color:'var(--mt)',fontFamily:'var(--sm)',marginBottom:3}}>
             {tCorrect}/20 correct

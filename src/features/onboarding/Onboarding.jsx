@@ -41,7 +41,7 @@ export default function Onboarding() {
     <div className="ob-wrap">
       <div className="ob-bg" style={{width:500,height:500,top:-200,right:-150}}/>
       <div className="ob-card">
-        <div className="ob-logo">⬡ StudyCoach</div>
+        <div className="ob-logo">🛩 SatPilot</div>
         <div className="ob-dots">
           {steps.map((_,i)=><div key={i} className={`ob-dot${i<step?' done':i===step?' active':''}`}/>)}
         </div>

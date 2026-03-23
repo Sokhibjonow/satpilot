@@ -39,7 +39,7 @@ export default function Dashboard() {
     <div className="page">
       <div className="ph">
         <div className="pt">Welcome <em>back</em></div>
-        <div className="ps">{goal || 'StudyCoach'} · {exam}{diagDone ? ' · Diagnostic ✓' : ''}</div>
+        <div className="ps">{goal || 'SatPilot'} · {exam}{diagDone ? ' · Diagnostic ✓' : ''}</div>
       </div>
 
       {/* Decay alert */}

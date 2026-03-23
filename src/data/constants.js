@@ -26,7 +26,6 @@ export const RANKS = [
 export const NAV = [
   { id: 'dashboard', icon: '⌂',  label: 'Home' },
   { id: 'plan',      icon: '◫',  label: 'Plan' },
-  { id: 'focus',     icon: '🎯', label: 'Focus' },
   { id: 'ai',        icon: '✦',  label: 'AI Tutor' },
   { id: 'progress',  icon: '◈',  label: 'Progress' },
   { id: 'profile',   icon: '◉',  label: 'Profile' },
