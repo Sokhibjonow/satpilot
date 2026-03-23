@@ -275,3 +275,27 @@ input,textarea{font-family:var(--ss)}
   .dash-grid{grid-template-columns:1fr}.tasks-card{grid-column:1/2}
   .ach-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* AI Tutor responsive */
+.ai-grid{display:grid;grid-template-columns:1fr 260px;gap:16px;align-items:start}
+@media(max-width:768px){
+  .ai-grid{grid-template-columns:1fr}
+  .ai-grid > div:last-child{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .ai-sug{margin-bottom:0}
+}
+@media(max-width:480px){
+  .ai-grid > div:last-child{grid-template-columns:1fr}
+}
+
+/* Quick Topics chips on mobile */
+@media(max-width:768px){
+  .ai-topics-mobile{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
+  .ai-topics-mobile::-webkit-scrollbar{display:none}
+  .ai-topic-chip{flex-shrink:0;background:white;border:1px solid var(--bd);border-radius:22px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap;font-family:var(--ss)}
+  .ai-topic-chip:hover{border-color:var(--g);color:var(--g)}
+  .ai-sidebar-topics{display:none}
+}
+@media(min-width:769px){
+  .ai-topics-mobile{display:none}
+  .ai-sidebar-topics{display:block}
+}

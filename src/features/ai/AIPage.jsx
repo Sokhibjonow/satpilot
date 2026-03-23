@@ -54,7 +54,20 @@ export default function AIPage() {
   return(
     <div className="page">
       <div className="ph"><div className="pt">✦ AI <em>Tutor</em></div><div className="ps">Explanations · Weakness analysis · Mini-tests · +5 XP per session</div></div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 270px',gap:16}}>
+
+      {/* Mobile: horizontal scrollable chips */}
+      <div className="ai-topics-mobile">
+        {[{icon:'📐',text:'Linear & Quadratic',s:'SAT Math'},{icon:'📊',text:'Data Analysis',s:'SAT Math'},{icon:'📖',text:'Main Idea',s:'SAT Reading'},{icon:'✏️',text:'Semicolons',s:'SAT Writing'},{icon:'🔤',text:'Vocab in Context',s:'SAT Reading'}].map(t=>(
+          <button key={t.text} className="ai-topic-chip" onClick={()=>ask(t.text)}>{t.icon} {t.text}</button>
+        ))}
+        {weak.map(([k,v])=>(
+          <button key={k} className="ai-topic-chip" style={{borderColor:'rgba(201,95,58,.3)',color:'var(--r)'}} onClick={()=>ask(`Explain ${SUBJ[k]?.label} for SAT`)}>
+            ⚠️ {SUBJ[k]?.label} {v}%
+          </button>
+        ))}
+      </div>
+
+      <div className="ai-grid">
         <div>
           {diagDone&&(
             <div style={{background:'rgba(201,95,58,.05)',border:'1px solid rgba(201,95,58,.18)',borderRadius:12,padding:14,marginBottom:14}}>
@@ -92,7 +105,7 @@ export default function AIPage() {
           {aiRes&&!aiLoad&&<AIResult result={aiRes}/>}
         </div>
 
-        <div>
+        <div className="ai-sidebar-topics">
           <div className="cl" style={{marginBottom:10}}>Quick Topics</div>
           {[{icon:'📐',text:'Linear & Quadratic Equations',sub:'SAT Math'},{icon:'📊',text:'Data Analysis',sub:'SAT Math'},{icon:'📖',text:'Main Idea & Author Purpose',sub:'SAT Reading'},{icon:'✏️',text:'Comma and Semicolon Rules',sub:'SAT Writing'},{icon:'🔤',text:'Vocabulary in Context',sub:'SAT Reading'}].map(s=>(
             <button key={s.text} className="ai-sug" onClick={()=>ask(s.text)}>
