@@ -5,12 +5,14 @@ import { getWeak } from '../../hooks/useProgress.js'
 import AIResult from './AIResult.jsx'
 
 const callClaude = async (messages, system) => {
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
-    method:'POST', headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, system, messages })
+  const r = await fetch('/api/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, system })
   })
   const d = await r.json()
-  return d.content?.find(b=>b.type==='text')?.text||''
+  if (!r.ok) throw new Error(d.error || 'API error')
+  return d.content?.find(b => b.type === 'text')?.text || ''
 }
 
 export default function AIPage() {
