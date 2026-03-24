@@ -6,9 +6,12 @@ import { calcSkills, buildDailyPlan } from '../../hooks/useProgress.js'
 import QuestionCard from './QuestionCard.jsx'
 
 export default function TestPage() {
-  const { setScreen, addHlog, setSkills, setDiagDone, setDAnswers, setTasks, setSDots } = useStore()
-  const [modIdx, setModIdx] = useState(0)
-  const [qIdx, setQIdx]     = useState(0)
+  const {
+    setScreen, addHlog, setSkills, setDiagDone, setDAnswers,
+    setTasks, setSDots, modIdx, setModIdx
+  } = useStore()
+
+  const [qIdx, setQIdx]       = useState(0)
   const [answers, setAnswers] = useState({})
   const [sel, setSel]         = useState(null)
   const [rev, setRev]         = useState(false)
@@ -21,32 +24,45 @@ export default function TestPage() {
 
   const advance = () => {
     const nq = qIdx + 1
-    if (nq < curQs.length) { setQIdx(nq); setSel(null); setRev(false); return }
+    if (nq < curQs.length) {
+      setQIdx(nq); setSel(null); setRev(false)
+      return
+    }
     const nm = modIdx + 1
     if (nm < DIAG_MODULES.length) {
-      setModIdx(nm); setQIdx(0); setSel(null); setRev(false)
-      setScreen('mod-intro'); return
+      setModIdx(nm)      // ← update STORE modIdx
+      setQIdx(0); setSel(null); setRev(false)
+      setScreen('mod-intro')
+      return
     }
     finishTest()
   }
 
   const confirm = () => {
     if (sel === null && !rev) return
-    if (!rev) { setRev(true); setAnswers(p => ({ ...p, [curQ.id]: sel })) }
-    else advance()
+    if (!rev) {
+      setRev(true)
+      setAnswers(p => ({ ...p, [curQ.id]: sel }))
+    } else {
+      advance()
+    }
   }
 
   const finishTest = async () => {
     setGenerating(true)
-    const statuses = ['Analyzing results...','Calculating skills...','Building your plan...','Done!']
-    for (const s of statuses) { setGen(s); await new Promise(r => setTimeout(r, 700)) }
+    const statuses = ['Analyzing results...', 'Calculating skills...', 'Building your plan...', 'Done!']
+    for (const s of statuses) {
+      setGen(s)
+      await new Promise(r => setTimeout(r, 700))
+    }
     const computed = calcSkills(answers)
     setSkills(computed)
     setDiagDone(true)
     setDAnswers(answers)
     setTasks(buildDailyPlan(computed))
-    setSDots(Array(14).fill('').map((_,i)=>i===0?'today':''))
+    setSDots(Array(14).fill('').map((_,i) => i===0 ? 'today' : ''))
     addHlog('Completed Diagnostic Test')
+    setModIdx(0)  // reset for next time
     setScreen('app')
   }
 
